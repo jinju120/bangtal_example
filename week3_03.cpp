@@ -1,20 +1,37 @@
-﻿// week3_03.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
+﻿#include <bangtal>
+using namespace bangtal;
 
-#include <iostream>
+/*람다 기능으로 대체
+bool door1_mouseCallback(ObjectPtr object, int x, int y, MouseAction action)
+{
+	endGame();
+	return true;
+}*/
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	//장면 생성하기
+	auto scene1 = Scene::create("room1", "images/배경-1.png"); //scnePtr
+	auto scene2 = Scene::create("room2", "images/배경-2.png");
+
+	//문 생성하기
+	auto door1 = Object::create("images/문-오른쪽-닫힘.png", scene1, 800, 270, true);
+	auto door2 = Object::create("images/문-왼쪽-열림.png", scene2, 320, 270, true);
+	auto door3 = Object::create("images/문-오른쪽-닫힘.png", scene2, 900, 270, true);
+
+	//문을 클릭하면 이동한다
+	//door1->setOnMouseCallback(door1_mouseCallback); 람다 함수로 대체 (이름 없는 함수를 만들어 assign)
+	door1->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action) -> bool {
+		scene2->enter();
+		return true;
+		});
+	door3->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action) -> bool {
+		endGame();
+		return true;
+		});
+
+
+	//게임 시작
+	startGame(scene1); //start from 'scene1'
+	return 0;
 }
-
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
